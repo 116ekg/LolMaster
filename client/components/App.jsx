@@ -1,7 +1,6 @@
 import React from 'react'
 import SummonerName from './SummonerName.jsx'
 import Champions from './Champions.jsx'
-import MasteryIcons from './MasteryIcons.jsx'
 import axios from 'axios'
 
 export default class App extends React.Component {
@@ -11,7 +10,6 @@ export default class App extends React.Component {
       input: '',
       summonerName: '',
       champions: [],
-      mIcons: [],
       champNames: []
     }
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -25,6 +23,7 @@ export default class App extends React.Component {
   }
 
   handleSubmit(e) {
+    e.preventDefault()
     this.setState({summonerName: this.state.input})
     axios.post('/pingUsername', {
       username: this.state.input
@@ -50,7 +49,8 @@ export default class App extends React.Component {
         }
       )
         .then(result => {
-          tempArr.push(result.data.name)
+          result.data.championLevel = this.state.champions[i].championLevel
+          tempArr.push(result.data)
           if (count === 5) {
             this.setState({champNames: tempArr})
             console.log(this.state.champNames)
@@ -61,16 +61,29 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='container'>
 
-        <SummonerName name={this.state.summonerName} />
-        <Champions champs={this.state.champions} names={this.state.champNames} />
-        <MasteryIcons icons={this.state.mIcons} />
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-3 text-center">
+            <h1 id="logo">Master Rank</h1>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className='col-sm-4 col-sm-offset-4 text-center'>
+            <SummonerName name={this.state.summonerName} />
+          </div>
+        </div>
+
+        <Champions champs={this.state.champNames} />
         
-        <form>
-          <input type='text' placeholder='Enter summoner name' onChange={this.handleInputChange} ></input>
-        </form>
-        <button onClick={this.handleSubmit}> Submit </button>
+        <div className="row">
+          <div className="col-sm-6 col-sm-offset-3 text-center">
+            <form className="form-group" onSubmit={this.handleSubmit}>
+              <input type='text' className="form-control text-center" placeholder='Enter summoner name' onChange={this.handleInputChange} ></input>
+            </form>
+          </div>
+        </div>
 
       </div>
     )
