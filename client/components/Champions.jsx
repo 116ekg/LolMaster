@@ -10,9 +10,12 @@ export default class Champions extends React.Component {
       <div>
         {this.props.champs.map((champ, i) => 
           (<div>
-            <p>{champ.championId} --- {champ.championLevel}</p>
+            <p>{champ.championId}</p>
             </div>
             )
+        )}
+        {this.props.names.map((name, i) => 
+          (<div>{name}</div>)
         )}
       </div>
     )
