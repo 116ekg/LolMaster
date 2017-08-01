@@ -45,8 +45,21 @@ app.post('/getHistory', function(req, res) {
         console.log('error getting match history from riot')
       })
   })
-  
 })
+
+// app.post('getLiveMatch', function(req, res) {
+//   axios.get(`https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/${req.body.username}?api_key=${API_KEY}`)
+//     .then(response => {
+//       console.log(response.data)
+//       axios.get(`https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/${response.data.id}?api_key=${API_KEY}`)
+//         .then(result => {
+//           res.send(result.data)
+//         })
+//         .catch(err => {
+//           console.log('error getting live match data from riot - possibly not in game')
+//         })
+//     })
+// })
 
 app.get('/*', function(req, res) {
   res.redirect('/')

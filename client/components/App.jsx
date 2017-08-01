@@ -29,6 +29,8 @@ export default class App extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
     this.setState({summonerName: this.state.input})
+
+    // Get user and champion mastery data
     axios.post('/getMastery', {
       username: this.state.input
     })
@@ -38,16 +40,29 @@ export default class App extends React.Component {
           tempArr.push(result.data[i])
         }
         this.setState({champions: tempArr})
+
+        // Assign champID's returned to champion names
         this.getChampNames()
+
+        // Get the last 20 matches played
         axios.post('/getHistory', {
           username: this.state.input
         })
           .then(response => {
             this.setState({matches: response.data.matches})
+
+            // Assign champID's to icons for match history
             this.getMatchChamps()
           })
       })
       .catch('error client side requesting user data')
+
+    // axios.post('/getLiveMatch', {
+    //   username: this.state.input
+    // })
+    //   .then(result => {
+    //     console.log(result.data)
+    //   })
   }
 
   getMatchChamps() {
@@ -78,6 +93,7 @@ export default class App extends React.Component {
       )
         .then(result => {
           result.data.championLevel = this.state.champions[i].championLevel
+          result.data.masteryPoints = this.state.champions[i].championPoints
           tempArr.push(result.data)
           if (count === 5) {
             this.setState({champNames: tempArr})

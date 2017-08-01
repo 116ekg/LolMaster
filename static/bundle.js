@@ -26645,6 +26645,8 @@ var App = function (_React$Component) {
 
       e.preventDefault();
       this.setState({ summonerName: this.state.input });
+
+      // Get user and champion mastery data
       _axios2.default.post('/getMastery', {
         username: this.state.input
       }).then(function (result) {
@@ -26653,14 +26655,27 @@ var App = function (_React$Component) {
           tempArr.push(result.data[i]);
         }
         _this2.setState({ champions: tempArr });
+
+        // Assign champID's returned to champion names
         _this2.getChampNames();
+
+        // Get the last 20 matches played
         _axios2.default.post('/getHistory', {
           username: _this2.state.input
         }).then(function (response) {
           _this2.setState({ matches: response.data.matches });
+
+          // Assign champID's to icons for match history
           _this2.getMatchChamps();
         });
       }).catch('error client side requesting user data');
+
+      // axios.post('/getLiveMatch', {
+      //   username: this.state.input
+      // })
+      //   .then(result => {
+      //     console.log(result.data)
+      //   })
     }
   }, {
     key: 'getMatchChamps',
@@ -26695,6 +26710,7 @@ var App = function (_React$Component) {
           champId: _this4.state.champions[i].championId
         }).then(function (result) {
           result.data.championLevel = _this4.state.champions[i].championLevel;
+          result.data.masteryPoints = _this4.state.champions[i].championPoints;
           tempArr.push(result.data);
           if (count === 5) {
             _this4.setState({ champNames: tempArr });
@@ -26865,11 +26881,17 @@ var Champions = function (_React$Component) {
           this.props.champs.map(function (champ, i) {
             return _react2.default.createElement(
               'div',
-              { className: 'col-sm-2' },
+              { className: 'col-sm-2 popUpParent' },
               _react2.default.createElement(
                 _reactRouterDom.Link,
                 { to: '/' + champ.name },
-                _react2.default.createElement('img', { className: 'champRow', src: champ.icon })
+                _react2.default.createElement('img', { className: 'champRow', src: champ.icon }),
+                _react2.default.createElement(
+                  'div',
+                  { id: 'champPopUp' },
+                  champ.masteryPoints,
+                  ' points'
+                )
               )
             );
           })
@@ -27856,7 +27878,8 @@ var ChampionPage = function (_React$Component) {
       championName: '',
       championId: '',
       championIcon: '',
-      championSplash: ''
+      championSplash: '',
+      championDesc: ''
     };
     return _this;
   }
@@ -27874,7 +27897,8 @@ var ChampionPage = function (_React$Component) {
           championName: result.data.name,
           championId: result.data.champId,
           championIcon: result.data.icon,
-          championSplash: result.data.splash
+          championSplash: result.data.splash,
+          championDesc: result.data.desc
         });
       }).catch(function (err) {
         console.log('error in component did mount on championpage');
@@ -27885,39 +27909,47 @@ var ChampionPage = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        null,
         _react2.default.createElement(
           'div',
-          { className: 'row' },
+          { className: 'container' },
           _react2.default.createElement(
             'div',
-            { className: 'col-sm-6 col-sm-offset-3 text-center' },
+            { className: 'row' },
             _react2.default.createElement(
-              'h1',
-              { id: 'champPageHeader' },
-              this.state.championName
+              'div',
+              { className: 'col-sm-6 col-sm-offset-3 text-center' },
+              _react2.default.createElement(
+                'h1',
+                { id: 'champPageHeader' },
+                this.state.championName
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-8 col-sm-offset-2' },
+              _react2.default.createElement('img', { className: 'champSplash text-center', src: this.state.championSplash })
             )
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'row' },
+          { 'class': 'container-fluid' },
           _react2.default.createElement(
             'div',
-            { className: 'col-sm-4 col-sm-offset-2' },
-            _react2.default.createElement('img', { className: 'champSplash text-center', src: this.state.championSplash })
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'row' },
-          _react2.default.createElement(
-            'div',
-            { className: 'col-sm-6 col-sm-offset-3', id: 'descBox' },
+            { className: 'row' },
             _react2.default.createElement(
-              'h3',
-              { id: 'champDesc' },
-              '"This is the champion description. It says some things...and then some other things. Some are mysterious and some are funny. But champions in this game are cool sometimes."'
+              'div',
+              { className: 'col-sm-12', id: 'descBox' },
+              _react2.default.createElement(
+                'h3',
+                { id: 'champDesc' },
+                this.state.championDesc
+              )
             )
           )
         )

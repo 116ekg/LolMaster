@@ -8,7 +8,8 @@ export default class ChampionPage extends React.Component {
       championName: '',
       championId: '',
       championIcon: '',
-      championSplash: ''
+      championSplash: '',
+      championDesc: ''
     }
   }
 
@@ -22,7 +23,8 @@ export default class ChampionPage extends React.Component {
           championName: result.data.name,
           championId: result.data.champId,
           championIcon: result.data.icon,
-          championSplash: result.data.splash
+          championSplash: result.data.splash,
+          championDesc: result.data.desc
         })
       })
       .catch(err => {
@@ -32,25 +34,29 @@ export default class ChampionPage extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-sm-6 col-sm-offset-3 text-center">
-            <h1 id='champPageHeader'>{this.state.championName}</h1>
-          </div>
-        </div>
+      <div>
+        <div className="container">
 
-        <div className="row">
-          <div className="col-sm-4 col-sm-offset-2">
-            <img className="champSplash text-center" src={this.state.championSplash}></img>
+          <div className="row">
+            <div className="col-sm-6 col-sm-offset-3 text-center">
+              <h1 id='champPageHeader'>{this.state.championName}</h1>
+            </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className='col-sm-6 col-sm-offset-3' id='descBox'>
-            <h3 id='champDesc'>
-              "This is the champion description. It says some things...and then some other things. Some are mysterious and some are 
-              funny. But champions in this game are cool sometimes."
-            </h3>
+          <div className="row">
+            <div className="col-sm-8 col-sm-offset-2">
+              <img className="champSplash text-center" src={this.state.championSplash}></img>
+            </div>
+          </div>
+
+        </div>
+        <div class='container-fluid'>
+          <div className="row">
+            <div className='col-sm-12' id='descBox'>
+              <h3 id='champDesc'>
+                {this.state.championDesc}
+              </h3>
+            </div>
           </div>
         </div>
       </div>

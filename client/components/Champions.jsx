@@ -16,9 +16,13 @@ export default class Champions extends React.Component {
         <div className='row'>
           <div className="col-sm-1"></div>
           {this.props.champs.map((champ, i) => 
-            (<div className='col-sm-2'>
+            (<div className='col-sm-2 popUpParent'>
               <Link to={'/' + champ.name}>
                 <img className="champRow" src={champ.icon}></img>
+
+                <div id='champPopUp'>
+                  {champ.masteryPoints} points
+                </div>
               </Link>
               </div>
             )
