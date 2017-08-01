@@ -47,6 +47,10 @@ app.post('/getHistory', function(req, res) {
   })
 })
 
+app.get('/', function(req, res) {
+  app.use(express.static(path.join(__dirname, '../static')))
+})
+
 app.get('/*', function(req, res) {
   res.redirect('/')
 })
