@@ -1,6 +1,7 @@
 import React from 'react'
 import SummonerName from './SummonerName.jsx'
 import Champions from './Champions.jsx'
+import History from './History.jsx'
 import axios from 'axios'
 
 export default class App extends React.Component {
@@ -10,11 +11,14 @@ export default class App extends React.Component {
       input: '',
       summonerName: '',
       champions: [],
-      champNames: []
+      champNames: [],
+      matches: [],
+      matchChamps: []
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.getChampNames = this.getChampNames.bind(this)
+    this.getMatchChamps = this.getMatchChamps.bind(this)
   }
 
   handleInputChange(e) {
@@ -25,7 +29,7 @@ export default class App extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
     this.setState({summonerName: this.state.input})
-    axios.post('/pingUsername', {
+    axios.post('/getMastery', {
       username: this.state.input
     })
       .then(result => {
@@ -35,8 +39,32 @@ export default class App extends React.Component {
         }
         this.setState({champions: tempArr})
         this.getChampNames()
+        axios.post('/getHistory', {
+          username: this.state.input
+        })
+          .then(response => {
+            this.setState({matches: response.data.matches})
+            this.getMatchChamps()
+          })
       })
       .catch('error client side requesting user data')
+  }
+
+  getMatchChamps() {
+    let tempArr = []
+    let count = 0
+    for (let i = 0; i < this.state.matches.length; i++) {
+      count++
+      axios.post('/api/champion/addChampion', {
+        champId: this.state.matches[i].champion
+      })
+        .then(result => {
+          tempArr.push(result.data)
+          if (count === this.state.matches.length) {
+            this.setState({matchChamps: tempArr})
+          }
+        })
+    }
   }
 
   getChampNames() {
@@ -53,7 +81,6 @@ export default class App extends React.Component {
           tempArr.push(result.data)
           if (count === 5) {
             this.setState({champNames: tempArr})
-            console.log(this.state.champNames)
           }
         })
     }
@@ -83,6 +110,10 @@ export default class App extends React.Component {
               <input type='text' className="form-control text-center" placeholder='Enter summoner name' onChange={this.handleInputChange} ></input>
             </form>
           </div>
+        </div>
+
+        <div className='row'>
+          <History matches={this.state.matchChamps} />
         </div>
 
       </div>

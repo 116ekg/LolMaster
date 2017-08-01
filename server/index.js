@@ -18,7 +18,7 @@ app.use('/api', router)
 
 // Riot API routes
 
-app.post('/pingUsername', function(req, res) {
+app.post('/getMastery', function(req, res) {
   axios.get(`https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/${req.body.username}?api_key=${API_KEY}`)
     .then(result => {
       axios.get(`https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/${result.data.id}?api_key=${API_KEY}`)
@@ -32,6 +32,20 @@ app.post('/pingUsername', function(req, res) {
     .catch(err => {
       console.log('error getting user data from riot')
     })
+})
+
+app.post('/getHistory', function(req, res) {
+  axios.get(`https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/${req.body.username}?api_key=${API_KEY}`)
+  .then(response => {
+    axios.get(`https://na1.api.riotgames.com/lol/match/v3/matchlists/by-account/${response.data.accountId}/recent?api_key=${API_KEY}`)
+      .then(result => {
+        res.send(result.data)
+      })
+      .catch(err => {
+        console.log('error getting match history from riot')
+      })
+  })
+  
 })
 
 

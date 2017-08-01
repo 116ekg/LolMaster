@@ -23186,6 +23186,10 @@ var _Champions = __webpack_require__(194);
 
 var _Champions2 = _interopRequireDefault(_Champions);
 
+var _History = __webpack_require__(214);
+
+var _History2 = _interopRequireDefault(_History);
+
 var _axios = __webpack_require__(195);
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -23210,11 +23214,14 @@ var App = function (_React$Component) {
       input: '',
       summonerName: '',
       champions: [],
-      champNames: []
+      champNames: [],
+      matches: [],
+      matchChamps: []
     };
     _this.handleInputChange = _this.handleInputChange.bind(_this);
     _this.handleSubmit = _this.handleSubmit.bind(_this);
     _this.getChampNames = _this.getChampNames.bind(_this);
+    _this.getMatchChamps = _this.getMatchChamps.bind(_this);
     return _this;
   }
 
@@ -23231,7 +23238,7 @@ var App = function (_React$Component) {
 
       e.preventDefault();
       this.setState({ summonerName: this.state.input });
-      _axios2.default.post('/pingUsername', {
+      _axios2.default.post('/getMastery', {
         username: this.state.input
       }).then(function (result) {
         var tempArr = [];
@@ -23240,12 +23247,37 @@ var App = function (_React$Component) {
         }
         _this2.setState({ champions: tempArr });
         _this2.getChampNames();
+        _axios2.default.post('/getHistory', {
+          username: _this2.state.input
+        }).then(function (response) {
+          _this2.setState({ matches: response.data.matches });
+          _this2.getMatchChamps();
+        });
       }).catch('error client side requesting user data');
+    }
+  }, {
+    key: 'getMatchChamps',
+    value: function getMatchChamps() {
+      var _this3 = this;
+
+      var tempArr = [];
+      var count = 0;
+      for (var i = 0; i < this.state.matches.length; i++) {
+        count++;
+        _axios2.default.post('/api/champion/addChampion', {
+          champId: this.state.matches[i].champion
+        }).then(function (result) {
+          tempArr.push(result.data);
+          if (count === _this3.state.matches.length) {
+            _this3.setState({ matchChamps: tempArr });
+          }
+        });
+      }
     }
   }, {
     key: 'getChampNames',
     value: function getChampNames() {
-      var _this3 = this;
+      var _this4 = this;
 
       var tempArr = [];
       var count = 0;
@@ -23253,13 +23285,12 @@ var App = function (_React$Component) {
       var _loop = function _loop(i) {
         count++;
         _axios2.default.post('/api/champion/addChampion', {
-          champId: _this3.state.champions[i].championId
+          champId: _this4.state.champions[i].championId
         }).then(function (result) {
-          result.data.championLevel = _this3.state.champions[i].championLevel;
+          result.data.championLevel = _this4.state.champions[i].championLevel;
           tempArr.push(result.data);
           if (count === 5) {
-            _this3.setState({ champNames: tempArr });
-            console.log(_this3.state.champNames);
+            _this4.setState({ champNames: tempArr });
           }
         });
       };
@@ -23309,6 +23340,11 @@ var App = function (_React$Component) {
               _react2.default.createElement('input', { type: 'text', className: 'form-control text-center', placeholder: 'Enter summoner name', onChange: this.handleInputChange })
             )
           )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'row' },
+          _react2.default.createElement(_History2.default, { matches: this.state.matchChamps })
         )
       );
     }
@@ -24319,6 +24355,58 @@ module.exports = function spread(callback) {
   };
 };
 
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(25);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var History = function (_React$Component) {
+  _inherits(History, _React$Component);
+
+  function History(props) {
+    _classCallCheck(this, History);
+
+    return _possibleConstructorReturn(this, (History.__proto__ || Object.getPrototypeOf(History)).call(this, props));
+  }
+
+  _createClass(History, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'col-sm-10 col-sm-offset-1 text-center' },
+        this.props.matches.map(function (match, i) {
+          return _react2.default.createElement('img', { className: 'historyRow', src: match.icon });
+        })
+      );
+    }
+  }]);
+
+  return History;
+}(_react2.default.Component);
+
+exports.default = History;
 
 /***/ })
 /******/ ]);

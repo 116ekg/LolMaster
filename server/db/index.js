@@ -28,7 +28,7 @@ const Champion = db.define('champion', {
 })
 
 User.sync()
-Champion.sync()
+Champion.sync({force: true})
   .then(function() {
     console.log('Champion table created...')
     return Champion.bulkCreate([
@@ -160,7 +160,7 @@ Champion.sync()
       {name: 'Volibear', champId: 106, icon: '/LOLicons/VolibearSquare.png'},
       {name: 'Warwick', champId: 19, icon: '/LOLicons/WarwickSquare.png'},
       {name: 'Xayah', champId: 498, icon: '/LOLicons/XayahSquare.png'},
-      {name: 'Xerath', champId: 101, icon: '/LOLicons/Xerathquare.png'},
+      {name: 'Xerath', champId: 101, icon: '/LOLicons/XerathSquare.png'},
       {name: 'Xin Zhao', champId: 5, icon: '/LOLicons/Xin_ZhaoSquare.png'},
       {name: 'Yasuo', champId: 157, icon: '/LOLicons/YasuoSquare.png'},
       {name: 'Yorick', champId: 83, icon: '/LOLicons/YorickSquare.png'},
