@@ -48,6 +48,10 @@ app.post('/getHistory', function(req, res) {
   
 })
 
+app.get('/*', function(req, res) {
+  res.redirect('/')
+})
+
 
 app.listen(PORT, function() {
   console.log('now serving on port ', PORT)

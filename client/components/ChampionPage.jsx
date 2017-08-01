@@ -35,13 +35,22 @@ export default class ChampionPage extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3 text-center">
-            <h1 id='logo'>{this.state.championName}</h1>
+            <h1 id='champPageHeader'>{this.state.championName}</h1>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-sm-6 col-sm-offset-1">
+          <div className="col-sm-4 col-sm-offset-2">
             <img className="champSplash text-center" src={this.state.championSplash}></img>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className='col-sm-6 col-sm-offset-3' id='descBox'>
+            <h3 id='champDesc'>
+              "This is the champion description. It says some things...and then some other things. Some are mysterious and some are 
+              funny. But champions in this game are cool sometimes."
+            </h3>
           </div>
         </div>
       </div>

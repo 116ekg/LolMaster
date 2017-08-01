@@ -30,6 +30,16 @@ h1 {
 }
 
 .champSplash {
-  width: 900px;
+  width: 750px;
   height: auto;
+}
+
+#champDesc {
+  color: #afafaf;
+  font-style: italic;
+}
+
+#champPageHeader {
+  margin-top: 60px;
+  font-size: 80px;
 }
