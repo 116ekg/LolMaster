@@ -13,7 +13,7 @@ module.exports = {
         console.log('error fetching all champs')
       })
   },
-  createChampion: (req, res) => {
+  createChampionId: (req, res) => {
     db.Champion.findOrCreate({
       where: {
         champId: req.body.champId
@@ -31,5 +31,24 @@ module.exports = {
         res.status(500).send(err)
         console.log('error making new champ')
       })
+  },
+  createChampionName: (req, res) => {
+  db.Champion.findOrCreate({
+    where: {
+      name: req.body.name
+    }
+  })
+    .spread((newChamp, created) => {
+      console.log('found existing or made new champ')
+      if (created) {
+        res.status(200).send(newChamp)
+      } else {
+        res.status(200).send(newChamp)
+      }
+    })
+    .catch(err => {
+      res.status(500).send(err)
+      console.log('error making new champ')
+    })
   }
 }

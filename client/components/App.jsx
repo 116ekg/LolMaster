@@ -55,7 +55,7 @@ export default class App extends React.Component {
     let count = 0
     for (let i = 0; i < this.state.matches.length; i++) {
       count++
-      axios.post('/api/champion/addChampion', {
+      axios.post('/api/champion/addChampionId', {
         champId: this.state.matches[i].champion
       })
         .then(result => {
@@ -72,7 +72,7 @@ export default class App extends React.Component {
     let count = 0
     for (let i = 0; i < this.state.champions.length; i++) {
       count++
-      axios.post('/api/champion/addChampion', {
+      axios.post('/api/champion/addChampionId', {
           champId: this.state.champions[i].championId
         }
       )
@@ -88,35 +88,35 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div className='container'>
+        <div className='container'>
 
-        <div className="row">
-          <div className="col-sm-6 col-sm-offset-3 text-center">
-            <h1 id="logo">Master Rank</h1>
+          <div className="row">
+            <div className="col-sm-6 col-sm-offset-3 text-center">
+              <h1 id="logo">Master Rank</h1>
+            </div>
           </div>
-        </div>
 
-        <div className="row">
-          <div className='col-sm-4 col-sm-offset-4 text-center'>
-            <SummonerName name={this.state.summonerName} />
+          <div className="row">
+            <div className='col-sm-4 col-sm-offset-4 text-center'>
+              <SummonerName name={this.state.summonerName} />
+            </div>
           </div>
-        </div>
 
-        <Champions champs={this.state.champNames} />
-        
-        <div className="row">
-          <div className="col-sm-6 col-sm-offset-3 text-center">
-            <form className="form-group" onSubmit={this.handleSubmit}>
-              <input type='text' className="form-control text-center" placeholder='Enter summoner name' onChange={this.handleInputChange} ></input>
-            </form>
+          <Champions champs={this.state.champNames} />
+          
+          <div className="row">
+            <div className="col-sm-6 col-sm-offset-3 text-center">
+              <form className="form-group" onSubmit={this.handleSubmit}>
+                <input type='text' className="form-control text-center" placeholder='Enter summoner name' onChange={this.handleInputChange} ></input>
+              </form>
+            </div>
           </div>
-        </div>
 
-        <div className='row'>
-          <History matches={this.state.matchChamps} />
-        </div>
+          <div className='row'>
+            <History matches={this.state.matchChamps} />
+          </div>
 
-      </div>
+        </div>
     )
   }
 }
