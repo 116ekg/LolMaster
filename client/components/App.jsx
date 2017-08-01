@@ -57,12 +57,6 @@ export default class App extends React.Component {
       })
       .catch('error client side requesting user data')
 
-    // axios.post('/getLiveMatch', {
-    //   username: this.state.input
-    // })
-    //   .then(result => {
-    //     console.log(result.data)
-    //   })
   }
 
   getMatchChamps() {

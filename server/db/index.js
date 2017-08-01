@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('./config')
+const axios = require('axios')
+const API_KEY = require('../../apikey.js')
 
 const User = db.define('user', {
   name: {
@@ -30,6 +32,45 @@ const Champion = db.define('champion', {
     allowNull: false
   },
   desc: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  }
+})
+
+const Static = db.define('static', {
+  difficulty: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  attack: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  defense: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  magic: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  enemyTips: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  allyTips: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  lore: {
     type: Sequelize.TEXT,
     allowNull: false
   }
@@ -184,7 +225,31 @@ Champion.sync({force: true})
     console.log('seeded champion table....')
   })
 
+Static.sync()
+  // .then(function() {
+  //   axios.get(`https://na1.api.riotgames.com/lol/static-data/v3/champions?locale=en_US&tags=all&dataById=true&api_key=${API_KEY}`)
+  //     .then(response => {
+  //       for (var key in response.data.data) {
+  //         Static.create({
+  //           difficulty: response.data.data[key].info.difficulty,
+  //           attack: response.data.data[key].info.attack,
+  //           defense: response.data.data[key].info.defense,
+  //           magic: response.data.data[key].info.magic,
+  //           enemyTips: response.data.data[key].enemytips[0],
+  //           name: response.data.data[key].key,
+  //           title: response.data.data[key].title,
+  //           allyTips: response.data.data[key].allytips[0],
+  //           lore: response.data.data[key].lore
+  //         })
+  //       }
+  //     })
+  //     .then(function() {
+  //       console.log('seeded static table')
+  //     })
+  // })
+
 module.exports = {
   User,
-  Champion
+  Champion,
+  Static
 }

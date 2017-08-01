@@ -26669,13 +26669,6 @@ var App = function (_React$Component) {
           _this2.getMatchChamps();
         });
       }).catch('error client side requesting user data');
-
-      // axios.post('/getLiveMatch', {
-      //   username: this.state.input
-      // })
-      //   .then(result => {
-      //     console.log(result.data)
-      //   })
     }
   }, {
     key: 'getMatchChamps',
@@ -27879,7 +27872,14 @@ var ChampionPage = function (_React$Component) {
       championId: '',
       championIcon: '',
       championSplash: '',
-      championDesc: ''
+      championDesc: '',
+      championDifficulty: '',
+      championAttack: '',
+      championDefense: '',
+      championMagic: '',
+      allyTips: '',
+      enemyTips: '',
+      title: ''
     };
     return _this;
   }
@@ -27890,6 +27890,8 @@ var ChampionPage = function (_React$Component) {
       var _this2 = this;
 
       var champName = decodeURI(window.location.pathname.slice(1));
+      var secondChampName = champName.replace(/'/g, '');
+      secondChampName = champName.replace(/ /g, '');
       _axios2.default.post('/api/champion/addChampionName', {
         name: champName
       }).then(function (result) {
@@ -27902,6 +27904,20 @@ var ChampionPage = function (_React$Component) {
         });
       }).catch(function (err) {
         console.log('error in component did mount on championpage');
+      });
+      _axios2.default.post('/api/static/findStaticData', {
+        name: secondChampName
+      }).then(function (response) {
+        _this2.setState({
+          championDifficulty: response.data.difficulty,
+          championAttack: response.data.attack,
+          championDefense: response.data.defense,
+          championMagic: response.data.magic,
+          allyTips: response.data.allyTips,
+          enemyTips: response.data.enemyTips,
+          title: response.data.title
+        });
+        console.log(_this2.state);
       });
     }
   }, {
@@ -27931,6 +27947,21 @@ var ChampionPage = function (_React$Component) {
             { className: 'row' },
             _react2.default.createElement(
               'div',
+              { className: 'col-sm-6 col-sm-offset-3 text-center' },
+              _react2.default.createElement(
+                'h3',
+                { id: 'title' },
+                ' ',
+                this.state.title,
+                ' '
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
               { className: 'col-sm-8 col-sm-offset-2' },
               _react2.default.createElement('img', { className: 'champSplash text-center', src: this.state.championSplash })
             )
@@ -27938,17 +27969,101 @@ var ChampionPage = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { 'class': 'container-fluid' },
+          { className: 'container-fluid', id: 'descBox' },
           _react2.default.createElement(
             'div',
             { className: 'row' },
             _react2.default.createElement(
               'div',
-              { className: 'col-sm-12', id: 'descBox' },
+              { className: 'col-sm-12' },
               _react2.default.createElement(
                 'h3',
                 { id: 'champDesc' },
                 this.state.championDesc
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-1 col-sm-offset-2' },
+              _react2.default.createElement('img', { src: './icons/sword.png', className: 'icon' })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-1' },
+              _react2.default.createElement(
+                'h4',
+                null,
+                ' ',
+                this.state.championAttack,
+                ' '
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-1 col-sm-offset-1' },
+              _react2.default.createElement('img', { src: './icons/shield.png', className: 'icon' })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-1' },
+              _react2.default.createElement(
+                'h4',
+                null,
+                ' ',
+                this.state.championDefense,
+                ' '
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-1 col-sm-offset-1' },
+              _react2.default.createElement('img', { src: './icons/staff.png', className: 'icon' })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-1' },
+              _react2.default.createElement(
+                'h4',
+                null,
+                ' ',
+                this.state.championMagic,
+                ' '
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-4 col-sm-offset-2 tips' },
+              _react2.default.createElement(
+                'h3',
+                null,
+                'Ally Tip:'
+              ),
+              _react2.default.createElement(
+                'p',
+                { className: 'tipText' },
+                this.state.allyTips
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-sm-4 tips' },
+              _react2.default.createElement(
+                'h3',
+                null,
+                'Enemy Tip:'
+              ),
+              _react2.default.createElement(
+                'p',
+                { className: 'tipText' },
+                this.state.enemyTips
               )
             )
           )
